@@ -3,6 +3,7 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io"; 
 import Button from "../button/Button";
+import useRegisterModal from "@/app/hooks/useRegisterModal";
 
 interface ModalProps {
   isOpen?: boolean;
