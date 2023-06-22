@@ -11,7 +11,7 @@ const Avatar = () => {
       width="30"
       height="30"
     />
-  )
+  );
 }
 
 export default Avatar;

@@ -20,7 +20,7 @@ const MenuItem: FC<MenuItemProps> = ({ onClick, label }) => {
     >
       {label}
     </div>
-  )
+  );
 }
 
 export default MenuItem;
