@@ -5,12 +5,16 @@ import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { useCallback, useState } from "react";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
-import Modal from "./Modal";
 import { 
   FieldValues,
   SubmitHandler,
-  useForm
+  useForm,
 } from "react-hook-form";
+import { toast } from "react-hot-toast";
+import Modal from "./Modal";
+import Heading from "../Heading";
+import Input from "../input/Input";
+import Button from '../button/Button';
 
 const RegisterModal = () => {
   const { onClose, onOpen, isOpen } = useRegisterModal();
@@ -37,20 +41,87 @@ const RegisterModal = () => {
         onClose();
       })
       .catch(err => {
-        console.log(err);
+        toast.error("Register error!");
       })
       .finally(() => {
         setIsLoading(false);
       })
   }
 
+  const bodyContent = (
+    <div className="flex flex-col gap-4">
+      <Heading 
+        title="Welcome to Airbnb"
+        subtitle="Create an account!"
+        center
+      />
+      <Input 
+        id="email"
+        label="Email"
+        disabled={isLoading}
+        register={register}
+        required
+        errors={errors}
+      />
+       <Input 
+        id="name"
+        label="Name"
+        disabled={isLoading}
+        register={register}
+        required
+        errors={errors}
+      />
+       <Input 
+        id="password"
+        type="password"
+        label="Password"
+        disabled={isLoading}
+        register={register}
+        required
+        errors={errors}
+      />
+    </div>
+  )
+
+  const footerContent = (
+    <div className="flex flex-col gap-4 mt-3">
+      <hr />
+      <Button 
+        outline
+        label="Continue with Google"
+        icon={FcGoogle}
+        onClick={() => {}}
+      />
+      <Button 
+        outline
+        label="Continue with Github"
+        icon={AiFillGithub}
+        onClick={() => {}}
+      />
+      <div
+        className="flex flex-row items-center justify-center gap-2"
+      >
+        <div>Aready hava an account ?</div>
+        <div
+          className="text-neutral-800 cursor-pointer hover:underline"
+          onClick={onClose}
+        >
+          Login in
+        </div>
+      </div>
+    </div>
+  )
+
   return (
     <Modal 
       disabled={isLoading}
       isOpen={isOpen}
       title="Register"
+      actionLabel="Continue"
       onClose={onClose}
-      
+      onSubmit={handleSubmit(onSubmit)}
+      body={bodyContent}
+      footer={footerContent}
     />
   );
 }
