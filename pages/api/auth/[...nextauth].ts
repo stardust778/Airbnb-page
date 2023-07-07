@@ -9,16 +9,23 @@ import prisma from "@/app/libs/prismadb";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
+  // 在 providers 配置授权服务
   providers: [
-    GithubProvider({
-      clientId: process.env.GitHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string
+    GithubProvider({  // github 登录
+      clientId: process.env.GITHUB_ID as string,
+      clientSecret: process.env.GITHUB_SECRET as string,
+      httpOptions: {
+        timeout: 10000,
+      },
     }),
-    GoogleProvider({
+    GoogleProvider({  // google 登录
       clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      // httpOptions: {
+      //   timeout: 10000,
+      // },
     }),
-    CredentialsProvider({
+    CredentialsProvider({  // 密码登录
       name: 'credentials',
       credentials: {
         email: { label: 'email', type: 'text' },
@@ -52,12 +59,13 @@ export const authOptions: AuthOptions = {
       }
     })
   ],
+  // 登录登出等情况跳转的页面
   pages: {
     signIn: '/'
   },
-  debug: process.env.NODE_ENV === 'development',
+  debug: process.env.NODE_ENV === 'development',  // 设置在开发环境进行调试
   session: {
-    strategy: 'jwt'
+    strategy: 'jwt'  // 使用jwt为加密策略
   },
   secret: process.env.NEXTAUTH_SECRET
 };
