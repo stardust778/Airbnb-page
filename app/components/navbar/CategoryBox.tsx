@@ -1,17 +1,17 @@
+'use client';
+
 import { FC, useCallback } from "react";
 import { IconType } from "react-icons";
 import { useRouter, useSearchParams } from "next/navigation";
 import qs from "query-string";
 
 interface CategoryBoxProps {
-  description: string;
   label: string;
   icon: IconType;
   selected?: boolean;
 }
 
 const CategoryBox: FC<CategoryBoxProps> = ({
-  description,
   label,
   icon: Icon,
   selected
@@ -31,11 +31,21 @@ const CategoryBox: FC<CategoryBoxProps> = ({
       category: label
     };
 
-    
-  }, [label, params])
+    if (params?.get('category') === label) {
+      delete updatedQuery.category;
+    }
+
+    const url = qs.stringifyUrl({
+      url: '/',
+      query: updatedQuery
+    }, { skipNull: true });
+
+    router.push(url);
+  }, [label, params, router]);
 
   return (
     <div
+      onClick={handleClick}
       className={`
         flex
         flex-col

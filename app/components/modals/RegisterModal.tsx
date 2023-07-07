@@ -3,8 +3,9 @@
 import axios from "axios";
 import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
+import useLoginModal from "@/app/hooks/useLoginModal";
 import { 
   FieldValues,
   SubmitHandler,
@@ -18,7 +19,8 @@ import Input from "../input/Input";
 import Button from '../button/Button';
 
 const RegisterModal = () => {
-  const { onClose, onOpen, isOpen } = useRegisterModal();
+  const registerModal = useRegisterModal();
+  const loginModal = useLoginModal();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { 
     register,
@@ -39,7 +41,7 @@ const RegisterModal = () => {
 
     axios.post('/api/register', data)
       .then(() => {
-        onClose();
+        registerModal.onClose();
       })
       .catch(err => {
         toast.error("Register error!");
@@ -48,6 +50,11 @@ const RegisterModal = () => {
         setIsLoading(false);
       })
   }
+
+  const toggle = useCallback(() => {
+    registerModal.onClose();
+    loginModal.onOpen();
+  }, [registerModal, loginModal]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
@@ -105,7 +112,7 @@ const RegisterModal = () => {
         <div>Aready hava an account ?</div>
         <div
           className="text-neutral-800 cursor-pointer hover:underline"
-          onClick={onClose}
+          onClick={toggle}
         >
           Login in
         </div>
@@ -116,10 +123,10 @@ const RegisterModal = () => {
   return (
     <Modal 
       disabled={isLoading}
-      isOpen={isOpen}
+      isOpen={registerModal.isOpen}
       title="Register"
       actionLabel="Continue"
-      onClose={onClose}
+      onClose={registerModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
