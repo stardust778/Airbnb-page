@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, use } from "react";
+import { FC } from "react";
 import { useRouter } from "next/navigation";
 import Heading from "./Heading";
 import Button from "./button/Button";
