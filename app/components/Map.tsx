@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import L from "leaflet";
 
 import "leaflet/dist/leaflet.css";
@@ -24,10 +24,6 @@ interface MapProps {
 const Map: FC<MapProps> = ({
   center
 }) => {
-  useEffect(() => {
-    console.log(center, 'center')
-  }, [])
-
   return (
     <MapContainer
       center={center as L.LatLngExpression || [51, -0.09]}
