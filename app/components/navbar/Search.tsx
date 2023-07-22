@@ -1,10 +1,57 @@
 'use client';
 
+import { useSearchParams } from "next/navigation";
 import { BiSearch } from "react-icons/bi";
+import useSearchModal from "@/app/hooks/useSerachModal";
+import useCountries from "@/app/hooks/useCountries";
+import { useMemo } from "react";
+import { differenceInDays } from "date-fns/esm";
 
 const Search = () => {
+  const searchModal = useSearchModal();
+  const params = useSearchParams();
+  const { getByValue } = useCountries();
+
+  const locationValue = params?.get('locationValue');
+  const startDate = params?.get('startDate');
+  const endDate = params?.get('endDate');
+  const guestCount = params?.get('guestCount');
+
+  const locationLabel = useMemo(() => {
+    if (locationValue) {
+      return getByValue(locationValue as string)?.label;
+    }
+
+    return 'AnyWhere'
+  }, [locationValue, getByValue]);
+
+  const durationLabel = useMemo(() => {
+    if (startDate && endDate) {
+      const start = new Date(startDate as string);
+      const end = new Date(endDate as string);
+      let diff = differenceInDays(end, start);
+
+      if (diff === 0) {
+        diff = 1;
+      }
+
+      return `${diff} day`;
+    }
+
+    return 'AnyWeek';
+  }, [startDate, endDate]);
+
+  const guestLabel = useMemo(() => {
+    if (guestCount) {
+      return `${guestCount} Guests`;
+    }
+
+    return 'Add Guests';
+  }, [guestCount]);
+
   return (
     <div 
+      onClick={searchModal.onOpen}
       className="
         border-[1px] 
         w-full 
@@ -32,7 +79,7 @@ const Search = () => {
             px-6
           "
         >
-          SearchWhere
+          {locationLabel}
         </div>
         <div 
           className="
@@ -46,7 +93,7 @@ const Search = () => {
             text-center
           "
         >
-          SearchWeek
+          {durationLabel}
         </div>
         <div
           className="
@@ -60,7 +107,7 @@ const Search = () => {
             gap-3
           "
         >
-          <div className="hidden sm:block">Add Guests</div>
+          <div className="hidden sm:block">{guestLabel}</div>
           <div
             className="
               p-2
