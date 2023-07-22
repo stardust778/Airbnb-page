@@ -1,9 +1,12 @@
 'use client';
 
 import { useCallback, useState, FC } from "react";
+import { useRouter } from "next/navigation";
 import { AiOutlineMenu } from "react-icons/ai";
+
 import Avatar from "../avatar/Avatar";
 import MenuItem from "./MenuItem";
+
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import useRentModal from "@/app/hooks/useRentModal";
@@ -22,6 +25,7 @@ const UserMenu: FC<UserMenuProps> = ({
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const rentModal = useRentModal();
+  const router = useRouter();
 
   const toggleOpen = useCallback(() => {
     setIsOpen((isOpen) => !isOpen)
@@ -98,7 +102,7 @@ const UserMenu: FC<UserMenuProps> = ({
             {currentUser ? (
               <>
                 <MenuItem 
-                  onClick={() => {}}
+                  onClick={() => router.push('/trips')}
                   label="My trips"
                 />
                 <MenuItem 
